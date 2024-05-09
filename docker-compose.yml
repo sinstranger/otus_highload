@@ -16,7 +16,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   web_api:
-#    entrypoint: ["bash", "django-local-entrypoint.sh"]
+    entrypoint: ["bash", "flask-local-entrypoint.sh"]
     build: ./
     volumes:
       - ./:/app
@@ -26,9 +26,7 @@ services:
     depends_on:
       - postgres_db
     ports:
-      - '8000:8000'
-      - '80:80'
-      - '5000:5000'
+      - '80:5000'
 
 volumes:
   pgdata:
