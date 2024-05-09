@@ -16,7 +16,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   web_api:
-    entrypoint: ["bash", "django-local-entrypoint.sh"]
+#    entrypoint: ["bash", "django-local-entrypoint.sh"]
     build: ./
     volumes:
       - ./:/app
