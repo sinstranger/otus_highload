@@ -1,0 +1,34 @@
+x-common-env: &common-env
+    POSTGRES_DB: devops_py_db
+    POSTGRES_USER: devops_py_user
+    POSTGRES_PASSWORD: devops_py_password
+    POSTGRES_HOST: postgres_db
+
+services:
+
+  postgres_db:
+    image: postgres:13.9
+    restart: always
+    environment:
+      <<: *common-env
+      PGDATA : /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web_api:
+    entrypoint: ["bash", "django-local-entrypoint.sh"]
+    build: ./
+    volumes:
+      - ./:/app
+    environment:
+      <<: *common-env
+      POSTGRES_HOST: postgres_db
+    depends_on:
+      - postgres_db
+    ports:
+      - '8000:8000'
+      - '80:80'
+      - '5000:5000'
+
+volumes:
+  pgdata:
