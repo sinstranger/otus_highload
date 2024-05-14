@@ -1,4 +1,5 @@
 from flask_restful import Resource, abort, reqparse
+from psycopg2 import sql
 from werkzeug.security import generate_password_hash
 
 from db_utils import get_db_connection
@@ -10,21 +11,40 @@ class ListCreateUsers(Resource):
         users = self._get_users_from_db()
         return users, 200
 
-    # def post(self):
-    #     parser = reqparse.RequestParser()
-    #     parser.add_argument('first_name', type=str, required=True, help='first_name is required')
-    #     parser.add_argument('last_name', type=str, required=True, help='last_name is required')
-    #     parser.add_argument('date_of_birth', type=str)
-    #     parser.add_argument('gender', type=str)
-    #     parser.add_argument('interests', type=str)
-    #     parser.add_argument('city', type=str)
-    #     parser.add_argument('profile_page', type=str)
-    #     parser.add_argument('password', type=str, required=True, help='last_name is required')
-    #     args = parser.parse_args()
-    #
-    #
-    #
-    #     return {'message': 'User created successfully'}, 201
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('first_name', type=str, required=True, help='first_name is required')
+        parser.add_argument('last_name', type=str, required=True, help='last_name is required')
+        parser.add_argument('date_of_birth', type=str)
+        parser.add_argument('gender', type=str)
+        parser.add_argument('interests', type=str)
+        parser.add_argument('city', type=str)
+        parser.add_argument('profile_page', type=str)
+        parser.add_argument('password', type=str, required=True, help='last_name is required')
+        args = parser.parse_args()
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        insert_query = sql.SQL("""
+            INSERT INTO users (first_name, last_name, date_of_birth, gender, interests, city, profile_page, password)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            RETURNING id
+        """)
+
+        cur.execute(insert_query, (
+            args['first_name'], args['last_name'], args.get('date_of_birth'),
+            args.get('gender'), args.get('interests'), args.get('city'),
+            args.get('profile_page'), args['password']
+        ))
+
+        new_user_id = cur.fetchone()[0]
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return {'message': 'User created successfully', 'user_id': new_user_id}, 201
 
     def _get_users_from_db(self):
         conn = get_db_connection()

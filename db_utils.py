@@ -23,7 +23,7 @@ class UserFieldNames(enum.Enum):
 
 user_table_create_statement = """
 CREATE TABLE IF NOT EXISTS Users (
-    user_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     date_of_birth DATE,
