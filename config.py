@@ -1,10 +1,10 @@
 import os
 
 
-postgres_db = os.environ.get("POSTGRES_DB") #: devops_py_db
-postgres_user = os.environ.get("POSTGRES_USER") #: devops_py_user
-postgres_password = os.environ.get("POSTGRES_PASSWORD") #: devops_py_password
-postgres_host = os.environ.get("POSTGRES_HOST") #: postgres_db
+postgres_db = os.environ.get("POSTGRES_DB")
+postgres_user = os.environ.get("POSTGRES_USER")
+postgres_password = os.environ.get("POSTGRES_PASSWORD")
+postgres_host = os.environ.get("POSTGRES_HOST")
 
 
 class Config:

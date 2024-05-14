@@ -1,13 +1,30 @@
-from flask_restful import Resource, abort
+from flask_restful import Resource, abort, reqparse
+from werkzeug.security import generate_password_hash
 
 from db_utils import get_db_connection
 
 
-class ListUsers(Resource):
+class ListCreateUsers(Resource):
 
     def get(self):
         users = self._get_users_from_db()
         return users, 200
+
+    # def post(self):
+    #     parser = reqparse.RequestParser()
+    #     parser.add_argument('first_name', type=str, required=True, help='first_name is required')
+    #     parser.add_argument('last_name', type=str, required=True, help='last_name is required')
+    #     parser.add_argument('date_of_birth', type=str)
+    #     parser.add_argument('gender', type=str)
+    #     parser.add_argument('interests', type=str)
+    #     parser.add_argument('city', type=str)
+    #     parser.add_argument('profile_page', type=str)
+    #     parser.add_argument('password', type=str, required=True, help='last_name is required')
+    #     args = parser.parse_args()
+    #
+    #
+    #
+    #     return {'message': 'User created successfully'}, 201
 
     def _get_users_from_db(self):
         conn = get_db_connection()
