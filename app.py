@@ -78,13 +78,9 @@ class GetUser(Resource):
             return None
 
 
-
-
-
 api.add_resource(ListUsers, '/users')
 api.add_resource(GetUser, '/users/<int:user_id>')
 
 
 if __name__ == '__main__':
     prepare_tables()
-    app.run(debug=True)
