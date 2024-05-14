@@ -16,7 +16,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   web_api:
-    entrypoint: ["bash", "flask-local-entrypoint.sh"]
+    entrypoint: ["bash", "flask-dev-entrypoint.sh"]
     build: ./
     volumes:
       - ./:/app
